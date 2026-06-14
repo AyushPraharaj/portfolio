@@ -1,92 +1,105 @@
 import { motion } from 'framer-motion';
-import { Mail, ExternalLink } from 'lucide-react';
+import { Mail } from 'lucide-react';
 import { GithubIcon, LinkedinIcon } from './Icons';
 
-const links = [
-  {
-    icon: GithubIcon,
-    label: 'GitHub',
-    sub: 'github.com/AyushPraharaj',
-    href: 'https://github.com/AyushPraharaj',
-    color: '#f8fafc',
-    bg: 'rgba(255,255,255,0.04)',
-    border: 'rgba(255,255,255,0.1)',
-  },
-  {
-    icon: LinkedinIcon,
-    label: 'LinkedIn',
-    sub: 'ayush-praharaj',
-    href: 'https://linkedin.com/in/ayush-praharaj',
-    color: '#0ea5e9',
-    bg: 'rgba(14,165,233,0.07)',
-    border: 'rgba(14,165,233,0.2)',
-  },
-  {
-    icon: Mail,
-    label: 'Email',
-    sub: 'ayushpraharaj2001@gmail.com',
-    href: 'mailto:ayushpraharaj2001@gmail.com',
-    color: '#8b5cf6',
-    bg: 'rgba(139,92,246,0.07)',
-    border: 'rgba(139,92,246,0.2)',
-  },
+const SOCIALS = [
+  { icon: GithubIcon,   label: 'GitHub',   href: 'https://github.com/AyushPraharaj',       color: '#f5f5f7' },
+  { icon: LinkedinIcon, label: 'LinkedIn', href: 'https://linkedin.com/in/ayush-praharaj', color: '#0ea5e9' },
+  { icon: Mail,         label: 'Email',    href: 'mailto:ayushpraharaj2001@gmail.com',       color: '#8b5cf6' },
 ];
 
 export default function Contact() {
   return (
-    <section id="contact" style={{ padding: '6rem 1.5rem 8rem', maxWidth: '1100px', margin: '0 auto', textAlign: 'center' }}>
-      <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }} transition={{ duration: 0.6 }}
-        style={{ marginBottom: '3.5rem' }}>
-        <span className="section-label">Get In Touch</span>
-        <h2 style={{ fontSize: 'clamp(1.8rem, 4vw, 2.8rem)', fontWeight: 700, marginTop: '0.5rem', letterSpacing: '-0.02em', marginBottom: '0.75rem' }}>
-          Let&apos;s Build Something Together
-        </h2>
-        <p style={{ color: '#64748b', fontSize: '0.95rem', maxWidth: '440px', margin: '0 auto', lineHeight: 1.75 }}>
-          Open to collaborations, internships, and interesting data or AI projects.
-          Reach out — I&apos;d love to connect.
+    <section id="contact" style={{
+      padding: 'clamp(6rem, 12vw, 10rem) 1.5rem clamp(5rem, 10vw, 8rem)',
+      textAlign: 'center',
+    }}>
+      <div style={{ maxWidth: '700px', margin: '0 auto' }}>
+
+        {/* Heading */}
+        <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }} transition={{ duration: 0.6 }}
+          style={{ marginBottom: '1.5rem' }}>
+          <span className="section-label" style={{ marginBottom: '1rem' }}>Get In Touch</span>
+          <h2 style={{
+            fontSize: 'clamp(2.8rem, 7vw, 5rem)', fontWeight: 800,
+            letterSpacing: '-0.04em', margin: 0, color: '#f5f5f7', lineHeight: 1.05,
+          }}>
+            Let&apos;s connect.
+          </h2>
+        </motion.div>
+
+        <motion.p
+          initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }} transition={{ duration: 0.55, delay: 0.1 }}
+          style={{ color: '#555', fontSize: '1rem', lineHeight: 1.8, margin: '0 0 3rem' }}>
+          Open to collaborations, internships, and interesting data or ML projects.
+          Reach out — I&apos;d love to hear from you.
+        </motion.p>
+
+        {/* Big email link */}
+        <motion.a
+          href="mailto:ayushpraharaj2001@gmail.com"
+          initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }} transition={{ duration: 0.55, delay: 0.18 }}
+          whileHover={{ scale: 1.03 }}
+          style={{
+            display: 'inline-block',
+            fontSize: 'clamp(1rem, 2.5vw, 1.3rem)',
+            fontWeight: 600, letterSpacing: '-0.025em',
+            color: '#86868b', textDecoration: 'none',
+            padding: '1rem 2rem', borderRadius: '14px',
+            background: '#080808', border: '1px solid #1a1a1a',
+            transition: 'color 0.25s, border-color 0.25s',
+            marginBottom: '3rem',
+          }}
+          onMouseEnter={e => { e.currentTarget.style.color = '#f5f5f7'; e.currentTarget.style.borderColor = '#333'; }}
+          onMouseLeave={e => { e.currentTarget.style.color = '#86868b'; e.currentTarget.style.borderColor = '#1a1a1a'; }}
+        >
+          ayushpraharaj2001@gmail.com
+        </motion.a>
+
+        {/* Social icons */}
+        <motion.div
+          initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }} transition={{ duration: 0.55, delay: 0.26 }}
+          style={{ display: 'flex', gap: '1rem', justifyContent: 'center', marginBottom: '5rem' }}>
+          {SOCIALS.map(({ icon: Icon, label, href, color }) => (
+            <motion.a
+              key={label}
+              href={href}
+              target={href.startsWith('mailto') ? undefined : '_blank'}
+              rel="noopener noreferrer"
+              title={label}
+              whileHover={{ y: -4, scale: 1.08 }}
+              style={{
+                width: 52, height: 52, borderRadius: '14px',
+                display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
+                background: '#0a0a0a', border: '1px solid #1d1d1f',
+                color: '#444', textDecoration: 'none', gap: 4,
+                transition: 'color 0.2s, border-color 0.2s, background 0.2s',
+              }}
+              onMouseEnter={e => {
+                e.currentTarget.style.color = color;
+                e.currentTarget.style.borderColor = color + '40';
+                e.currentTarget.style.background = color + '0e';
+              }}
+              onMouseLeave={e => {
+                e.currentTarget.style.color = '#444';
+                e.currentTarget.style.borderColor = '#1d1d1f';
+                e.currentTarget.style.background = '#0a0a0a';
+              }}
+            >
+              <Icon size={20} color="currentColor" />
+            </motion.a>
+          ))}
+        </motion.div>
+
+        {/* Footer */}
+        <p style={{ color: '#222', fontSize: '0.78rem', letterSpacing: '0.02em' }}>
+          Built with React · Vite · TensorFlow.js &nbsp;·&nbsp; {new Date().getFullYear()} Ayush Praharaj
         </p>
-      </motion.div>
-
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem', maxWidth: '700px', margin: '0 auto 3rem' }}>
-        {links.map(({ icon: Icon, label, sub, href, color, bg, border }, i) => (
-          <motion.a key={label} href={href}
-            target={href.startsWith('mailto') ? undefined : '_blank'}
-            rel="noopener noreferrer"
-            initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }} transition={{ duration: 0.5, delay: i * 0.08 }}
-            whileHover={{ y: -5 }}
-            className="glass-card"
-            style={{ padding: '1.5rem', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.6rem',
-              textDecoration: 'none', background: bg, borderColor: border, transition: 'box-shadow 0.3s' }}
-            onMouseEnter={e => e.currentTarget.style.boxShadow = `0 8px 32px ${color}22`}
-            onMouseLeave={e => e.currentTarget.style.boxShadow = 'none'}
-          >
-            <div style={{ width: '46px', height: '46px', borderRadius: '12px',
-              background: `${color}15`, border: `1px solid ${color}30`,
-              display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <Icon size={20} color={color} />
-            </div>
-            <span style={{ fontWeight: 600, fontSize: '0.95rem', color: '#f8fafc' }}>{label}</span>
-            <span style={{ fontSize: '0.75rem', color: '#475569', wordBreak: 'break-all' }}>{sub}</span>
-          </motion.a>
-        ))}
       </div>
-
-      {/* Resume download hint */}
-      <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }}
-        transition={{ duration: 0.6, delay: 0.3 }}
-        style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem',
-          padding: '0.9rem 1.75rem', borderRadius: '9999px',
-          background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)',
-          color: '#64748b', fontSize: '0.85rem', width: 'fit-content', margin: '0 auto 3rem' }}>
-        <ExternalLink size={14} />
-        Available for internships & full-time Data / ML roles
-      </motion.div>
-
-      <p style={{ color: '#1e293b', fontSize: '0.78rem' }}>
-        Built with React + Vite + TensorFlow.js · {new Date().getFullYear()} Ayush Praharaj
-      </p>
     </section>
   );
 }

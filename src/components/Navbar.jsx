@@ -1,103 +1,134 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
-import { Menu, X } from 'lucide-react';
+import { X, Menu } from 'lucide-react';
 
-const links = [
-  { label: 'About',      href: '#about'      },
+const NAV_LINKS = [
+  { label: 'About',      href: '#about' },
   { label: 'Experience', href: '#experience' },
-  { label: 'Skills',     href: '#skills'     },
-  { label: 'Projects',   href: '#projects'   },
-  { label: 'Live Demo',  href: '#demo'       },
+  { label: 'Skills',     href: '#skills' },
+  { label: 'Projects',   href: '#projects' },
+  { label: 'Demo',       href: '#ml-demo' },
 ];
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
-  const [open, setOpen] = useState(false);
+  const [hidden, setHidden]     = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const lastY = useRef(0);
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 20);
-    window.addEventListener('scroll', onScroll);
+    const onScroll = () => {
+      const y = window.scrollY;
+      setScrolled(y > 30);
+      if (y > lastY.current + 6 && y > 120) setHidden(true);
+      else if (y < lastY.current - 6) setHidden(false);
+      lastY.current = y;
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
   const scrollTo = (href) => {
-    setOpen(false);
-    document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' });
+    setMenuOpen(false);
+    setTimeout(() => document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' }), menuOpen ? 260 : 0);
+  };
+
+  const linkStyle = {
+    background: 'none', border: 'none', cursor: 'pointer',
+    color: '#86868b', fontSize: '0.875rem', fontWeight: 500,
+    transition: 'color 0.2s', padding: 0, letterSpacing: '-0.01em',
   };
 
   return (
-    <motion.nav
-      initial={{ y: -80, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: 0.7, ease: 'easeOut' }}
-      style={{
-        position: 'fixed', top: 0, left: 0, right: 0, zIndex: 50,
-        padding: '0 2rem', height: '64px',
-        display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-        background: scrolled ? 'rgba(10,10,15,0.88)' : 'transparent',
-        backdropFilter: scrolled ? 'blur(20px)' : 'none',
-        WebkitBackdropFilter: scrolled ? 'blur(20px)' : 'none',
-        borderBottom: scrolled ? '1px solid rgba(255,255,255,0.05)' : 'none',
-        transition: 'all 0.3s ease',
-      }}
-    >
-      {/* Logo */}
-      <button onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-        className="gradient-text"
-        style={{ fontSize: '1.4rem', fontWeight: 800, background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}>
-        AP
-      </button>
+    <>
+      <motion.nav
+        animate={{ y: hidden && !menuOpen ? -80 : 0, opacity: hidden && !menuOpen ? 0 : 1 }}
+        transition={{ duration: 0.28, ease: 'easeInOut' }}
+        style={{
+          position: 'fixed', top: 0, left: 0, right: 0, zIndex: 100,
+          padding: '0 1.5rem', height: '60px',
+          display: 'flex', alignItems: 'center',
+          background: scrolled ? 'rgba(0,0,0,0.82)' : 'transparent',
+          backdropFilter: scrolled ? 'blur(24px) saturate(180%)' : 'none',
+          WebkitBackdropFilter: scrolled ? 'blur(24px) saturate(180%)' : 'none',
+          borderBottom: scrolled ? '1px solid rgba(255,255,255,0.05)' : 'none',
+          transition: 'background 0.35s, border-color 0.35s',
+        }}
+      >
+        <div style={{
+          maxWidth: '1200px', margin: '0 auto', width: '100%',
+          display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+        }}>
+          <button
+            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+            style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}
+          >
+            <span style={{
+              fontSize: '1.1rem', fontWeight: 700, letterSpacing: '-0.04em',
+              background: 'linear-gradient(135deg, #6366f1, #8b5cf6)',
+              WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text',
+            }}>AP</span>
+          </button>
 
-      {/* Desktop */}
-      <ul style={{ display: 'flex', gap: '1.75rem', listStyle: 'none', margin: 0, padding: 0 }}
-          className="hidden md:flex">
-        {links.map(link => (
-          <li key={link.href}>
-            <button onClick={() => scrollTo(link.href)}
-              style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#64748b',
-                fontSize: '0.85rem', fontWeight: 500, transition: 'color 0.2s', padding: '0.2rem 0' }}
-              onMouseEnter={e => e.currentTarget.style.color = '#f8fafc'}
-              onMouseLeave={e => e.currentTarget.style.color = '#64748b'}>
-              {link.label}
-            </button>
-          </li>
-        ))}
-      </ul>
+          <div className="nav-desktop" style={{ display: 'flex', alignItems: 'center', gap: '2rem' }}>
+            {NAV_LINKS.map(({ label, href }) => (
+              <button key={label} onClick={() => scrollTo(href)} style={linkStyle}
+                onMouseEnter={e => e.currentTarget.style.color = '#f5f5f7'}
+                onMouseLeave={e => e.currentTarget.style.color = '#86868b'}>
+                {label}
+              </button>
+            ))}
+            <button
+              onClick={() => scrollTo('#contact')}
+              style={{
+                padding: '0.42rem 1rem', borderRadius: '8px', letterSpacing: '-0.01em',
+                fontSize: '0.85rem', fontWeight: 500, cursor: 'pointer',
+                background: 'rgba(99,102,241,0.12)', border: '1px solid rgba(99,102,241,0.28)',
+                color: '#a5b4fc', transition: 'background 0.2s, border-color 0.2s',
+              }}
+              onMouseEnter={e => { e.currentTarget.style.background = 'rgba(99,102,241,0.22)'; e.currentTarget.style.borderColor = 'rgba(99,102,241,0.45)'; }}
+              onMouseLeave={e => { e.currentTarget.style.background = 'rgba(99,102,241,0.12)'; e.currentTarget.style.borderColor = 'rgba(99,102,241,0.28)'; }}
+            >Contact</button>
+          </div>
 
-      <button className="btn-primary md:flex hidden" onClick={() => scrollTo('#contact')}
-        style={{ padding: '0.5rem 1.2rem', fontSize: '0.82rem' }}>
-        Contact
-      </button>
+          <button
+            className="nav-hamburger"
+            onClick={() => setMenuOpen(v => !v)}
+            style={{ display: 'none', background: 'none', border: 'none', cursor: 'pointer', color: '#86868b', padding: 4 }}
+            aria-label="Toggle menu"
+          >
+            {menuOpen ? <X size={20} /> : <Menu size={20} />}
+          </button>
+        </div>
+      </motion.nav>
 
-      {/* Mobile hamburger */}
-      <button className="md:hidden" onClick={() => setOpen(!open)}
-        style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#f8fafc', padding: '0.25rem' }}>
-        {open ? <X size={22} /> : <Menu size={22} />}
-      </button>
-
-      {open && (
-        <motion.div initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }}
+      {menuOpen && (
+        <motion.div
+          initial={{ opacity: 0, y: -8 }}
+          animate={{ opacity: 1, y: 0 }}
           style={{
-            position: 'absolute', top: '64px', left: 0, right: 0,
-            background: 'rgba(10,10,15,0.97)', backdropFilter: 'blur(20px)',
-            borderBottom: '1px solid rgba(255,255,255,0.06)',
-            padding: '1rem 2rem 1.5rem', display: 'flex', flexDirection: 'column', gap: '1rem',
-          }}>
-          {links.map(link => (
-            <button key={link.href} onClick={() => scrollTo(link.href)}
-              style={{ background: 'none', border: 'none', cursor: 'pointer',
-                color: '#64748b', fontSize: '1rem', fontWeight: 500, textAlign: 'left', padding: '0.2rem 0' }}
-              onMouseEnter={e => e.currentTarget.style.color = '#f8fafc'}
-              onMouseLeave={e => e.currentTarget.style.color = '#64748b'}>
-              {link.label}
+            position: 'fixed', top: '60px', left: 0, right: 0, zIndex: 99,
+            background: 'rgba(0,0,0,0.96)', backdropFilter: 'blur(20px)',
+            borderBottom: '1px solid rgba(255,255,255,0.07)',
+            padding: '1.5rem',
+            display: 'flex', flexDirection: 'column', gap: '1.25rem',
+          }}
+        >
+          {[...NAV_LINKS, { label: 'Contact', href: '#contact' }].map(({ label, href }) => (
+            <button key={label} onClick={() => scrollTo(href)}
+              style={{ ...linkStyle, textAlign: 'left', fontSize: '1rem', color: '#f5f5f7' }}>
+              {label}
             </button>
           ))}
-          <button className="btn-primary" onClick={() => scrollTo('#contact')}
-            style={{ marginTop: '0.5rem' }}>
-            Contact
-          </button>
         </motion.div>
       )}
-    </motion.nav>
+
+      <style>{`
+        @media (max-width: 720px) {
+          .nav-desktop { display: none !important; }
+          .nav-hamburger { display: flex !important; }
+        }
+      `}</style>
+    </>
   );
 }

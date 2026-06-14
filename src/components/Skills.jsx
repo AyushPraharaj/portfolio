@@ -1,110 +1,121 @@
-import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { skillCategories } from '../data/skills';
 
-export default function Skills() {
-  const [active, setActive] = useState('All');
+const ROW1 = [
+  { name: 'Python',          color: '#6366f1' },
+  { name: 'SQL',             color: '#6366f1' },
+  { name: 'PySpark',         color: '#6366f1' },
+  { name: 'Alteryx',         color: '#6366f1' },
+  { name: 'scikit-learn',    color: '#8b5cf6' },
+  { name: 'XGBoost',         color: '#8b5cf6' },
+  { name: 'PyTorch',         color: '#8b5cf6' },
+  { name: 'LangGraph',       color: '#8b5cf6' },
+  { name: 'HuggingFace',     color: '#8b5cf6' },
+  { name: 'SHAP',            color: '#8b5cf6' },
+  { name: 'ANN / MLP',       color: '#8b5cf6' },
+  { name: 'CNNs',            color: '#8b5cf6' },
+  { name: 'NLP',             color: '#8b5cf6' },
+  { name: 'Ensemble Models', color: '#8b5cf6' },
+];
 
-  const tabs = ['All', ...skillCategories.map(c => c.label)];
+const ROW2 = [
+  { name: 'Pandas',                color: '#06b6d4' },
+  { name: 'NumPy',                 color: '#06b6d4' },
+  { name: 'Power BI',              color: '#06b6d4' },
+  { name: 'Matplotlib',            color: '#06b6d4' },
+  { name: 'Seaborn',               color: '#06b6d4' },
+  { name: 'Feature Engineering',   color: '#06b6d4' },
+  { name: 'Statistical Analysis',  color: '#06b6d4' },
+  { name: 'A/B Testing',           color: '#06b6d4' },
+  { name: 'Excel',                 color: '#06b6d4' },
+  { name: 'FastAPI',               color: '#10b981' },
+  { name: 'Azure',                 color: '#10b981' },
+  { name: 'AWS S3',                color: '#10b981' },
+  { name: 'Git',                   color: '#10b981' },
+  { name: 'Docker',                color: '#10b981' },
+  { name: 'Jupyter',               color: '#10b981' },
+  { name: 'AWS CloudFront',        color: '#10b981' },
+];
 
-  const visible = active === 'All'
-    ? skillCategories
-    : skillCategories.filter(c => c.label === active);
-
+function Chip({ name, color }) {
   return (
-    <section id="skills" style={{ padding: '6rem 1.5rem', maxWidth: '1100px', margin: '0 auto' }}>
-      <motion.div
-        initial={{ opacity: 0, y: 30 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.6 }}
-        style={{ marginBottom: '3rem', textAlign: 'center' }}
-      >
-        <span className="section-label">What I Use</span>
-        <h2 style={{ fontSize: 'clamp(1.8rem, 4vw, 2.8rem)', fontWeight: 700, marginTop: '0.5rem', letterSpacing: '-0.02em' }}>
-          Tech Stack
-        </h2>
-      </motion.div>
+    <span style={{
+      display: 'inline-flex', alignItems: 'center', gap: '0.5rem',
+      padding: '0.45rem 1rem', borderRadius: '9999px', flexShrink: 0,
+      background: '#0a0a0a', border: '1px solid #1d1d1f',
+      fontSize: '0.84rem', fontWeight: 500, color: '#86868b',
+      userSelect: 'none',
+    }}>
+      <span style={{ width: 7, height: 7, borderRadius: '50%', background: color, flexShrink: 0 }} />
+      {name}
+    </span>
+  );
+}
 
-      {/* Category tabs */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.5, delay: 0.1 }}
-        style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', justifyContent: 'center', marginBottom: '2.5rem' }}
-      >
-        {tabs.map(tab => (
-          <button
-            key={tab}
-            onClick={() => setActive(tab)}
-            style={{
-              padding: '0.4rem 1rem',
-              borderRadius: '9999px',
-              fontSize: '0.82rem', fontWeight: 500,
-              cursor: 'pointer',
-              border: '1px solid',
-              transition: 'all 0.2s',
-              borderColor: active === tab ? '#6366f1' : 'rgba(255,255,255,0.1)',
-              background: active === tab ? 'rgba(99,102,241,0.15)' : 'transparent',
-              color: active === tab ? '#a5b4fc' : '#64748b',
-            }}
-          >
-            {tab}
-          </button>
-        ))}
-      </motion.div>
-
-      {/* Skill groups */}
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-        {visible.map((cat, catIdx) => (
-          <motion.div
-            key={cat.label}
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: catIdx * 0.08 }}
-            className="glass-card"
-            style={{ padding: '1.5rem' }}
-          >
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '1rem' }}>
-              <span style={{
-                width: '10px', height: '10px', borderRadius: '50%',
-                background: cat.color, flexShrink: 0,
-                boxShadow: `0 0 8px ${cat.color}`,
-              }} />
-              <span style={{ fontSize: '0.78rem', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.1em', color: cat.color }}>
-                {cat.label}
-              </span>
-            </div>
-
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
-              {cat.skills.map((skill, i) => (
-                <motion.span
-                  key={skill}
-                  initial={{ opacity: 0, scale: 0.85 }}
-                  whileInView={{ opacity: 1, scale: 1 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.3, delay: i * 0.04 }}
-                  whileHover={{ scale: 1.06 }}
-                  style={{
-                    padding: '0.35rem 0.85rem',
-                    borderRadius: '9999px',
-                    fontSize: '0.85rem', fontWeight: 500,
-                    background: cat.bg,
-                    border: `1px solid ${cat.color}33`,
-                    color: '#e2e8f0',
-                    cursor: 'default',
-                    display: 'inline-block',
-                  }}
-                >
-                  {skill}
-                </motion.span>
-              ))}
-            </div>
-          </motion.div>
+function MarqueeRow({ items, reverse }) {
+  const doubled = [...items, ...items];
+  return (
+    <div className="marquee-outer">
+      <div className={reverse ? 'marquee-track-rev' : 'marquee-track'} style={{ paddingBottom: '0.75rem' }}>
+        {doubled.map((item, i) => (
+          <Chip key={i} {...item} />
         ))}
       </div>
+    </div>
+  );
+}
+
+export default function Skills() {
+  return (
+    <section id="skills" style={{ padding: 'clamp(5rem, 10vw, 8rem) 0' }}>
+      <div style={{ maxWidth: '1100px', margin: '0 auto', padding: '0 1.5rem' }}>
+        <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }} transition={{ duration: 0.55 }}
+          style={{ marginBottom: '3rem' }}>
+          <span className="section-label" style={{ marginBottom: '0.75rem' }}>What I Use</span>
+          <h2 style={{
+            fontSize: 'clamp(2.8rem, 6vw, 4.5rem)', fontWeight: 800,
+            letterSpacing: '-0.04em', margin: 0, color: '#f5f5f7', lineHeight: 1.05,
+          }}>
+            Tech Stack.
+          </h2>
+        </motion.div>
+      </div>
+
+      {/* Marquee rows — edge-to-edge */}
+      <motion.div
+        initial={{ opacity: 0 }} whileInView={{ opacity: 1 }}
+        viewport={{ once: true }} transition={{ duration: 0.7, delay: 0.15 }}
+        style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', overflow: 'hidden' }}
+      >
+        {/* Fade masks on edges */}
+        <div style={{ position: 'relative' }}>
+          <div style={{
+            position: 'absolute', left: 0, top: 0, bottom: 0, width: '8rem', zIndex: 1,
+            background: 'linear-gradient(90deg, #000 0%, transparent 100%)',
+            pointerEvents: 'none',
+          }} />
+          <div style={{
+            position: 'absolute', right: 0, top: 0, bottom: 0, width: '8rem', zIndex: 1,
+            background: 'linear-gradient(270deg, #000 0%, transparent 100%)',
+            pointerEvents: 'none',
+          }} />
+          <MarqueeRow items={ROW1} reverse={false} />
+        </div>
+
+        <div style={{ position: 'relative' }}>
+          <div style={{
+            position: 'absolute', left: 0, top: 0, bottom: 0, width: '8rem', zIndex: 1,
+            background: 'linear-gradient(90deg, #000 0%, transparent 100%)',
+            pointerEvents: 'none',
+          }} />
+          <div style={{
+            position: 'absolute', right: 0, top: 0, bottom: 0, width: '8rem', zIndex: 1,
+            background: 'linear-gradient(270deg, #000 0%, transparent 100%)',
+            pointerEvents: 'none',
+          }} />
+          <MarqueeRow items={ROW2} reverse={true} />
+        </div>
+      </motion.div>
     </section>
   );
 }

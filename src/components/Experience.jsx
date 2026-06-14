@@ -3,84 +3,94 @@ import { Award, MapPin, Calendar } from 'lucide-react';
 import { experiences } from '../data/experience';
 
 export default function Experience() {
+  const exp = experiences[0];
+
   return (
-    <section id="experience" style={{ padding: '6rem 1.5rem', maxWidth: '1100px', margin: '0 auto' }}>
-      <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }} transition={{ duration: 0.6 }}
-        style={{ marginBottom: '3rem', textAlign: 'center' }}>
-        <span className="section-label">Work Experience</span>
-        <h2 style={{ fontSize: 'clamp(1.8rem, 4vw, 2.8rem)', fontWeight: 700, marginTop: '0.5rem', letterSpacing: '-0.02em' }}>
-          Experience
-        </h2>
-      </motion.div>
+    <section id="experience" style={{
+      padding: 'clamp(5rem, 10vw, 8rem) 1.5rem',
+      background: 'rgba(255,255,255,0.012)',
+      borderTop: '1px solid rgba(255,255,255,0.05)',
+      borderBottom: '1px solid rgba(255,255,255,0.05)',
+    }}>
+      <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
 
-      <div style={{ position: 'relative', maxWidth: '800px', margin: '0 auto' }}>
-        {/* Timeline line */}
-        <div style={{
-          position: 'absolute', left: '20px', top: 0, bottom: 0,
-          width: '1px', background: 'linear-gradient(to bottom, rgba(99,102,241,0.5), rgba(6,182,212,0.1))',
-        }} />
+        <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }} transition={{ duration: 0.55 }}>
+          <span className="section-label" style={{ marginBottom: '0.75rem' }}>Work Experience</span>
+          <h2 style={{
+            fontSize: 'clamp(2.8rem, 6vw, 4.5rem)', fontWeight: 800,
+            letterSpacing: '-0.04em', margin: '0 0 3.5rem', color: '#f5f5f7', lineHeight: 1.05,
+          }}>
+            Experience.
+          </h2>
+        </motion.div>
 
-        {experiences.map((exp, i) => (
-          <motion.div key={i}
-            initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }} transition={{ duration: 0.6, delay: i * 0.1 }}
-            style={{ paddingLeft: '56px', paddingBottom: '2rem', position: 'relative' }}>
-            {/* Timeline dot */}
-            <div style={{
-              position: 'absolute', left: '11px', top: '20px',
-              width: '18px', height: '18px', borderRadius: '50%',
-              background: exp.color, border: '3px solid #0a0a0f',
-              boxShadow: `0 0 12px ${exp.color}99`,
-            }} />
+        <motion.div
+          initial={{ opacity: 0, y: 32 }} whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }} transition={{ duration: 0.65, delay: 0.1 }}
+          className="v2-card"
+          style={{ padding: 'clamp(1.75rem, 4vw, 2.5rem)', maxWidth: '820px' }}
+        >
+          {/* Company + badge */}
+          <div style={{
+            display: 'flex', justifyContent: 'space-between',
+            alignItems: 'flex-start', flexWrap: 'wrap', gap: '1rem', marginBottom: '0.75rem',
+          }}>
+            <h3 style={{
+              margin: 0,
+              fontSize: 'clamp(1.6rem, 4vw, 2.5rem)',
+              fontWeight: 800, letterSpacing: '-0.035em',
+              color: exp.color, lineHeight: 1.1,
+            }}>
+              {exp.company}
+            </h3>
+            {exp.certified && (
+              <span style={{
+                display: 'inline-flex', alignItems: 'center', gap: '0.35rem',
+                padding: '0.3rem 0.85rem', borderRadius: '9999px',
+                fontSize: '0.72rem', fontWeight: 600, flexShrink: 0,
+                background: 'rgba(245,158,11,0.09)', border: '1px solid rgba(245,158,11,0.25)',
+                color: '#f59e0b',
+              }}>
+                <Award size={12} /> Certificate Awarded
+              </span>
+            )}
+          </div>
 
-            <div className="glass-card" style={{ padding: '1.75rem' }}>
-              {/* Header */}
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '0.75rem', marginBottom: '1rem' }}>
-                <div>
-                  <h3 style={{ margin: 0, fontSize: '1.1rem', fontWeight: 700, color: '#f8fafc' }}>
-                    {exp.role}
-                  </h3>
-                  <p style={{ margin: '0.25rem 0 0', fontSize: '0.95rem', fontWeight: 600, color: exp.color }}>
-                    {exp.company}
-                  </p>
-                </div>
-                {exp.certified && (
-                  <span style={{
-                    display: 'inline-flex', alignItems: 'center', gap: '0.3rem',
-                    padding: '0.25rem 0.75rem', borderRadius: '9999px', fontSize: '0.72rem', fontWeight: 600,
-                    background: 'rgba(245,158,11,0.12)', border: '1px solid rgba(245,158,11,0.3)',
-                    color: '#fbbf24', flexShrink: 0,
-                  }}>
-                    <Award size={11} /> Certified
-                  </span>
-                )}
-              </div>
+          {/* Role */}
+          <p style={{ margin: '0 0 0.65rem', fontSize: '1.05rem', fontWeight: 600, color: '#f5f5f7', letterSpacing: '-0.01em' }}>
+            {exp.role}
+          </p>
 
-              {/* Meta */}
-              <div style={{ display: 'flex', gap: '1.25rem', marginBottom: '1.25rem', flexWrap: 'wrap' }}>
-                {[
-                  { icon: Calendar, text: `${exp.period} · ${exp.duration}` },
-                  { icon: MapPin,   text: exp.location },
-                ].map(({ icon: Icon, text }) => (
-                  <span key={text} style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', fontSize: '0.8rem', color: '#64748b' }}>
-                    <Icon size={13} /> {text}
-                  </span>
-                ))}
-              </div>
+          {/* Meta */}
+          <div style={{ display: 'flex', gap: '1.5rem', flexWrap: 'wrap', marginBottom: '2rem' }}>
+            <span style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontSize: '0.82rem', color: '#555' }}>
+              <Calendar size={13} /> {exp.period} · {exp.duration}
+            </span>
+            <span style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontSize: '0.82rem', color: '#555' }}>
+              <MapPin size={13} /> {exp.location}
+            </span>
+          </div>
 
-              {/* Highlights */}
-              <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '0.65rem' }}>
-                {exp.highlights.map((h, j) => (
-                  <li key={j} style={{ display: 'flex', alignItems: 'flex-start', gap: '0.6rem', fontSize: '0.88rem', color: '#94a3b8', lineHeight: 1.65 }}>
-                    <span style={{ color: exp.color, marginTop: '3px', flexShrink: 0, fontWeight: 700 }}>▸</span>
-                    {h}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </motion.div>
-        ))}
+          <div style={{ borderTop: '1px solid #1a1a1a', marginBottom: '1.75rem' }} />
+
+          {/* Highlights */}
+          <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '1.1rem' }}>
+            {exp.highlights.map((h, i) => (
+              <li key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: '0.85rem', fontSize: '0.93rem', color: '#86868b', lineHeight: 1.72 }}>
+                <span style={{
+                  width: 22, height: 22, borderRadius: '50%', flexShrink: 0, marginTop: 2,
+                  background: `${exp.color}12`, border: `1px solid ${exp.color}28`,
+                  color: exp.color, fontSize: '0.65rem', fontWeight: 700,
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                }}>
+                  {i + 1}
+                </span>
+                {h}
+              </li>
+            ))}
+          </ul>
+        </motion.div>
       </div>
     </section>
   );
